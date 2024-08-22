@@ -1,14 +1,15 @@
 package com.backend.clinicaOdontologica.repository.impl;
 
-import com.backend.entity.Odontologo;
-import com.backend.repository.IDao;
-import org.apache.log4j.Logger;
+import com.backend.clinicaOdontologica.entity.Odontologo;
+import com.backend.clinicaOdontologica.repository.IDao;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class OdontologoDaoEnMemoria implements IDao<Odontologo> {
-    private final Logger LOGGER = Logger.getLogger(OdontologoDaoEnMemoria.class);
+    private final Logger LOGGER = LogManager.getLogger(OdontologoDaoEnMemoria.class);
 
     private List<Odontologo> odontologos = new ArrayList<>();
     private static long id = 1;

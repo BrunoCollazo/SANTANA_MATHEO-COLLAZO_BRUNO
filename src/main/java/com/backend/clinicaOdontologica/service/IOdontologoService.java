@@ -1,6 +1,6 @@
 package com.backend.clinicaOdontologica.service;
 
-import com.backend.entity.Odontologo;
+import com.backend.clinicaOdontologica.entity.Odontologo;
 
 import java.util.List;
 

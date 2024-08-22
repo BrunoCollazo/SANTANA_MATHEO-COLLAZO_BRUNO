@@ -1,8 +1,8 @@
 package com.backend.clinicaOdontologica.service.impl;
 
-import com.backend.entity.Odontologo;
-import com.backend.repository.IDao;
-import com.backend.service.IOdontologoService;
+import com.backend.clinicaOdontologica.entity.Odontologo;
+import com.backend.clinicaOdontologica.repository.IDao;
+import com.backend.clinicaOdontologica.service.IOdontologoService;
 
 import java.util.List;
 
