@@ -5,15 +5,15 @@ import com.backend.clinicaOdontologica.dbconnection.H2Connection;
 import com.backend.clinicaOdontologica.entity.Odontologo;
 import com.backend.clinicaOdontologica.repository.IDao;
 
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class OdontologoDaoH2 implements IDao<Odontologo> {
-    private final Logger LOGGER = LogManager.getLogger(OdontologoDaoH2.class);
+    private final Logger LOGGER = LoggerFactory.getLogger(OdontologoDaoH2.class);
 
     @Override
     public Odontologo guardar(Odontologo odontologo){
