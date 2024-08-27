@@ -22,7 +22,6 @@ public class PacienteService implements IPacienteService {
     private final IDao<Paciente> pacienteIDao;
     private final ModelMapper modelMapper;
 
-    @Autowired
     public PacienteService(IDao<Paciente> pacienteIDao, ModelMapper modelMapper) {
         this.pacienteIDao = pacienteIDao;
         this.modelMapper = modelMapper;

@@ -1,5 +1,7 @@
 package com.backend.clinicaOdontologica.entity;
 
+
+
 public class Domicilio {
     private Long id;
     private String calle;
