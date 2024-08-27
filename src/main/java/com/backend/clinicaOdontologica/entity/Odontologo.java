@@ -61,4 +61,5 @@ public class Odontologo {
                 ", nombre = '" + nombre + "'" +
                 ", apellido = '" + apellido + "'";
     }
+
 }

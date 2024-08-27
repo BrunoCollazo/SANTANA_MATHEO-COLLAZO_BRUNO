@@ -5,7 +5,6 @@ import com.backend.clinicaOdontologica.entity.Odontologo;
 import java.util.List;
 
 public interface IOdontologoService {
-    Odontologo guardarOdontologo(Odontologo odontologo);
+    Odontologo registrarOdontologo(Odontologo odontologo);
     List<Odontologo> listarOdontologos();
-
 }

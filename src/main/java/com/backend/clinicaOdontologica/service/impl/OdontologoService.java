@@ -13,8 +13,8 @@ public class OdontologoService implements IOdontologoService {
         this.odontologoIDao = odontologoIDao;
     }
     @Override
-    public Odontologo guardarOdontologo(Odontologo odontologo) {
-        return odontologoIDao.guardar(odontologo);
+    public Odontologo registrarOdontologo(Odontologo odontologo) {
+        return odontologoIDao.registrar(odontologo);
     }
 
     @Override

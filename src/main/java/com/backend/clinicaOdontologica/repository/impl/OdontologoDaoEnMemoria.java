@@ -15,13 +15,13 @@ public class OdontologoDaoEnMemoria implements IDao<Odontologo> {
     private static long id = 1;
 
     @Override
-    public Odontologo guardar(Odontologo odontologo) {
-        Odontologo odontologoGuardado = new Odontologo(odontologo.getMatricula(), odontologo.getNombre(), odontologo.getApellido());
-        odontologoGuardado.setId(id++);
+    public Odontologo registrar(Odontologo odontologo) {
+        Odontologo odontologoRegistrado = new Odontologo(odontologo.getMatricula(), odontologo.getNombre(), odontologo.getApellido());
+        odontologoRegistrado.setId(id++);
 
-        odontologos.add(odontologoGuardado);
-        LOGGER.info("Odontolgo guardado: " + odontologoGuardado);
-        return odontologoGuardado;
+        odontologos.add(odontologoRegistrado);
+        LOGGER.info("Odontolgo registrado: " + odontologoRegistrado);
+        return odontologoRegistrado;
     }
 
     @Override
@@ -29,9 +29,4 @@ public class OdontologoDaoEnMemoria implements IDao<Odontologo> {
         LOGGER.info("Odontolgos listados: " + odontologos);
         return odontologos;
     }
-
-
-
-
-
 }

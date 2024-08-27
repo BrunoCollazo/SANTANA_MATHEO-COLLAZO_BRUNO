@@ -1,10 +1,8 @@
 package com.backend.clinicaOdontologica.repository.impl;
 
-
 import com.backend.clinicaOdontologica.dbconnection.H2Connection;
 import com.backend.clinicaOdontologica.entity.Odontologo;
 import com.backend.clinicaOdontologica.repository.IDao;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,7 +14,7 @@ public class OdontologoDaoH2 implements IDao<Odontologo> {
     private final Logger LOGGER = LoggerFactory.getLogger(OdontologoDaoH2.class);
 
     @Override
-    public Odontologo guardar(Odontologo odontologo){
+    public Odontologo registrar(Odontologo odontologo){
         Odontologo odontologoRegistrado = null;
         Connection connection = null;
 
