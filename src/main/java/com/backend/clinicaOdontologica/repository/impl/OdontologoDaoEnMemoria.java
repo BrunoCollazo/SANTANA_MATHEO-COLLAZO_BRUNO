@@ -5,6 +5,7 @@ import com.backend.clinicaOdontologica.repository.IDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,8 +26,14 @@ public class OdontologoDaoEnMemoria implements IDao<Odontologo> {
     }
 
     @Override
+    public Odontologo buscarPorId(Long id) {
+        return null;
+    }
+
+    @Override
     public List<Odontologo> listarTodos() {
         LOGGER.info("Odontolgos listados: " + odontologos);
         return odontologos;
     }
+
 }

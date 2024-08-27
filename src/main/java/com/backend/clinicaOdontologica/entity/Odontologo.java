@@ -1,7 +1,7 @@
 package com.backend.clinicaOdontologica.entity;
 
 public class Odontologo {
-    private long id;
+    private Long id;
     private String matricula;
     private String nombre;
     private String apellido;
