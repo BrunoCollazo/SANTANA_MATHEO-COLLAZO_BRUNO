@@ -3,7 +3,7 @@ package com.backend.clinicaOdontologica.service.impl;
 import com.backend.clinicaOdontologica.dto.entrada.PacienteEntradaDto;
 import com.backend.clinicaOdontologica.dto.salida.PacienteSalidaDto;
 import com.backend.clinicaOdontologica.entity.Paciente;
-import com.backend.clinicaOdontologica.repository.IDao;
+import com.backend.clinicaOdontologica.repository.PacienteRepository;
 import com.backend.clinicaOdontologica.service.IPacienteService;
 import com.backend.clinicaOdontologica.utils.JsonPrinter;
 import org.modelmapper.ModelMapper;
@@ -19,11 +19,11 @@ public class PacienteService implements IPacienteService {
 
 
     private final Logger LOGGER = LoggerFactory.getLogger(PacienteService.class);
-    private final IDao<Paciente> pacienteIDao;
+    private final PacienteRepository pacienteRepository;
     private final ModelMapper modelMapper;
 
-    public PacienteService(IDao<Paciente> pacienteIDao, ModelMapper modelMapper) {
-        this.pacienteIDao = pacienteIDao;
+    public PacienteService(PacienteRepository pacienteRepository, ModelMapper modelMapper) {
+        this.pacienteRepository = pacienteRepository;
         this.modelMapper = modelMapper;
         configureMapping();
     }
@@ -35,7 +35,7 @@ public class PacienteService implements IPacienteService {
         LOGGER.info("PacienteEntradaDto: {}", JsonPrinter.toString(paciente));
         Paciente entidadPaciente = modelMapper.map(paciente, Paciente.class);
         LOGGER.info("EntidadPaciente: {}", JsonPrinter.toString(entidadPaciente));
-        Paciente pacienteRegistrado = pacienteIDao.registrar(entidadPaciente);
+        Paciente pacienteRegistrado = pacienteRepository.save(entidadPaciente);
         LOGGER.info("PacienteRegistrado: {}", JsonPrinter.toString(pacienteRegistrado));
         PacienteSalidaDto pacienteSalidaDto = modelMapper.map(pacienteRegistrado, PacienteSalidaDto.class);
         LOGGER.info("PacienteSalidaDto: {}", JsonPrinter.toString(pacienteSalidaDto));
@@ -49,7 +49,7 @@ public class PacienteService implements IPacienteService {
 
     @Override
     public List<PacienteSalidaDto> listarPacientes() {
-        List<PacienteSalidaDto> pacienteSalidaDtos = pacienteIDao.listarTodos()
+        List<PacienteSalidaDto> pacienteSalidaDtos = pacienteRepository.findAll()
                 .stream()
                 .map(paciente -> modelMapper.map(paciente, PacienteSalidaDto.class))
                 .toList();
@@ -62,6 +62,7 @@ public class PacienteService implements IPacienteService {
     public void eliminarPaciente(Long id) {
         if(buscarPacientePorId(id) != null){
             //llamada a la capa repositorio para eliminar
+            pacienteRepository.deleteById(id);
             LOGGER.warn("Se ha eliminado el paciente con id {}", id);
         } else {
             //excepcion resource not found
