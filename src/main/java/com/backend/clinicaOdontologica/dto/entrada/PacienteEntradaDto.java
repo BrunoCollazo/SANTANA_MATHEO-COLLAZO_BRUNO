@@ -10,9 +10,11 @@ public class PacienteEntradaDto {
     @NotBlank(message = "Debe especificarse el nombre del paciente")
     @Size(max = 50, message = "El nombre debe tener hasta 50 caracteres")
     private String nombre;
+
     @Size(max = 50, message = "El apellido debe tener hasta 50 caracteres")
     @NotBlank(message = "Debe especificarse el apellido del paciente")
     private String apellido;
+
     @Positive(message = "El dni del paciente no puede ser nulo o menor a cero")
     private int dni;
 
