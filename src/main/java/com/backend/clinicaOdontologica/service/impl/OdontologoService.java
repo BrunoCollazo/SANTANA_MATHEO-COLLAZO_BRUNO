@@ -1,5 +1,4 @@
 package com.backend.clinicaOdontologica.service.impl;
-
 import com.backend.clinicaOdontologica.dto.entrada.OdontologoEntradaDto;
 import com.backend.clinicaOdontologica.dto.salida.OdontologoSalidaDto;
 import com.backend.clinicaOdontologica.entity.Odontologo;

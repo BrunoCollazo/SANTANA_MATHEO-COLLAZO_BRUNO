@@ -1,5 +1,4 @@
 package com.backend.clinicaOdontologica.service.impl;
-
 import com.backend.clinicaOdontologica.dto.entrada.PacienteEntradaDto;
 import com.backend.clinicaOdontologica.dto.salida.PacienteSalidaDto;
 import com.backend.clinicaOdontologica.entity.Paciente;
@@ -9,7 +8,6 @@ import com.backend.clinicaOdontologica.utils.JsonPrinter;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
