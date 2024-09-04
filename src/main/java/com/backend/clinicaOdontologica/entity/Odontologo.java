@@ -22,18 +22,18 @@ public class Odontologo {
     public Odontologo() {
     }
 
-    public Odontologo(long id, String matricula, String nombre, String apellido) {
+    public Odontologo(Long id, String matricula, String nombre, String apellido) {
         this.id = id;
         this.matricula = matricula;
         this.nombre = nombre;
         this.apellido = apellido;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
