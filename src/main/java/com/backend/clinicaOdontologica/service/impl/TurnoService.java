@@ -84,7 +84,7 @@ public class TurnoService implements ITurnoService {
         return turnoSalidaDtos;
     }
     private void configureMapping(){
-        modelMapper.typeMap(TurnoEntradaDto.class, Turno.class);
+        modelMapper.emptyTypeMap(TurnoEntradaDto.class, Turno.class);
         modelMapper.typeMap(Turno.class, TurnoSalidaDto.class)
                 .addMappings(mapper -> mapper.map(Turno::getPaciente, TurnoSalidaDto::setPacienteSalidaDto))
                 .addMappings(mapper -> mapper.map(Turno::getOdontologo, TurnoSalidaDto::setOdontologoSalidaDto));
