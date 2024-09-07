@@ -35,12 +35,14 @@ public class TurnoService implements ITurnoService {
 
     @Override
     public TurnoSalidaDto registrarTurno(TurnoEntradaDto turno) {
-
         LOGGER.info("TurnoEntradaDto: {}", JsonPrinter.toString(turno));
+
         TurnoSalidaDto turnoSalidaDto = null;
+        //Busca que existan los id proporcioado por el constructor de TurnoEntradaDto
         PacienteSalidaDto pacienteSalidaDto = pacienteService.buscarPacientePorId(turno.getPacienteId());
         OdontologoSalidaDto odontologoSalidaDto = odontologoService.buscarOdontologoPorId(turno.getOdontologoId());
 
+        //ACA SE CAMBIA TODO POR EL MANEJO DE EXEPCIONES
         if(pacienteSalidaDto == null && odontologoSalidaDto == null){
             LOGGER.error("No existen ni el odontologo "+ turno.getOdontologoId()+" ni el paciente " + turno.getPacienteId());
 
@@ -51,14 +53,15 @@ public class TurnoService implements ITurnoService {
             LOGGER.error("No existe el odontologo "+ turno.getOdontologoId());
 
         }else{
+
             LOGGER.info("TurnoEntradaDto: {}", JsonPrinter.toString(turno));
             Turno entidadTurno = modelMapper.map(turno, Turno.class);
 
             LOGGER.info("EntidadTurno: {}", JsonPrinter.toString(entidadTurno));
 
+            //Set de Paciente  Odontologo
             Paciente paciente = modelMapper.map(pacienteSalidaDto, Paciente.class);
             Odontologo odontologo = modelMapper.map(odontologoSalidaDto, Odontologo.class);
-
             entidadTurno.setPaciente(paciente);
             entidadTurno.setOdontologo(odontologo);
 
@@ -89,6 +92,7 @@ public class TurnoService implements ITurnoService {
         modelMapper.typeMap(Turno.class, TurnoSalidaDto.class)
                 .addMappings(mapper -> mapper.map(Turno::getPaciente, TurnoSalidaDto::setPacienteSalidaDto))
                 .addMappings(mapper -> mapper.map(Turno::getOdontologo, TurnoSalidaDto::setOdontologoSalidaDto));
+
         modelMapper.typeMap(OdontologoSalidaDto.class, Odontologo.class);
         modelMapper.typeMap(PacienteSalidaDto.class, Paciente.class)
                 .addMappings(mapper -> mapper.map(PacienteSalidaDto::getDomicilioSalidaDto, Paciente::setDomicilio));

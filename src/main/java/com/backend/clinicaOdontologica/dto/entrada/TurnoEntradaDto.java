@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 
 public class TurnoEntradaDto {
 
-    @NotNull(message = "Debe ingresar un odontologo")
+    @NotNull(message = "Debe ingresar un paciente")
     private Long pacienteId;
 
     @NotNull(message = "Debe ingresar un odontologo")
