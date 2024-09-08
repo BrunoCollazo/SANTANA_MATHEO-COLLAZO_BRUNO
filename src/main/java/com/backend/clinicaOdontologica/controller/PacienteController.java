@@ -22,18 +22,12 @@ public class PacienteController {
         this.pacienteService = pacienteService;
     }
 
-
-    //JSON -> @RequestBody -> DTO Entrada -> controller --> service -> mapper = entidad --> repository --> BDD
-    //--> entidad --> repository --> service -> mapper -> DTO Salida --> controller -> @ResponseBody -> JSON --> cliente
-
-    //POST
     @PostMapping("/registrar")
     public ResponseEntity<PacienteSalidaDto> registrarPaciente(@RequestBody @Valid PacienteEntradaDto pacienteEntradaDto){
         PacienteSalidaDto pacienteSalidaDto = pacienteService.registrarPaciente(pacienteEntradaDto);
         return new ResponseEntity<>(pacienteSalidaDto, HttpStatus.CREATED);
     }
 
-    //GET
     @GetMapping("/listar")
     public ResponseEntity<List<PacienteSalidaDto>> listarPacientes(){
         return new ResponseEntity<>(pacienteService.listarPacientes(), HttpStatus.OK);

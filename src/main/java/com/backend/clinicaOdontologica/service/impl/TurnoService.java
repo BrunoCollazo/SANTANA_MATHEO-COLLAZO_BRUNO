@@ -7,6 +7,7 @@ import com.backend.clinicaOdontologica.dto.salida.TurnoSalidaDto;
 import com.backend.clinicaOdontologica.entity.Odontologo;
 import com.backend.clinicaOdontologica.entity.Paciente;
 import com.backend.clinicaOdontologica.entity.Turno;
+import com.backend.clinicaOdontologica.exceptions.ResourceNotFoundException;
 import com.backend.clinicaOdontologica.exceptions.BadRequestException;
 import com.backend.clinicaOdontologica.repository.TurnoRepository;
 import com.backend.clinicaOdontologica.service.ITurnoService;
@@ -89,6 +90,64 @@ public class TurnoService implements ITurnoService {
 
         return turnoSalidaDtos;
     }
+
+    @Override
+    public TurnoSalidaDto buscarTurnoPorId(Long id) {
+        Turno turno = turnoRepository.findById(id).orElse(null);
+        TurnoSalidaDto turnoSalidaDto = null;
+        if (turno != null){
+            turnoSalidaDto = modelMapper.map(turno, TurnoSalidaDto.class);
+        }
+        return turnoSalidaDto;
+    }
+
+    @Override
+    public void eliminarTurno(Long id) throws ResourceNotFoundException {
+        if(buscarTurnoPorId(id) != null){
+            //llamada a la capa repositorio para eliminar
+            turnoRepository.deleteById(id);
+            LOGGER.warn("Se ha eliminado el turno con id {}", id);
+        } else {
+            throw new ResourceNotFoundException("No existe el turno con id " + id);
+        }
+    }
+
+    @Override
+    public TurnoSalidaDto actualizarTurno(TurnoEntradaDto turnoEntradaDto, Long id) {
+        TurnoSalidaDto turnoSalidaDto = null;
+        if(buscarTurnoPorId(id) != null){
+
+            PacienteSalidaDto pacienteSalidaDto = pacienteService.buscarPacientePorId(turnoEntradaDto.getPacienteId());
+            OdontologoSalidaDto odontologoSalidaDto = odontologoService.buscarOdontologoPorId(turnoEntradaDto.getOdontologoId());
+
+            if(pacienteSalidaDto == null && odontologoSalidaDto == null){
+                LOGGER.error("No existen ni el odontologo "+ turnoEntradaDto.getOdontologoId()+" ni el paciente " + turnoEntradaDto.getPacienteId());
+
+            }else if (pacienteSalidaDto == null){
+                LOGGER.error("No existe el paciente " + turnoEntradaDto.getPacienteId());
+
+            }else if (odontologoSalidaDto == null){
+                LOGGER.error("No existe el odontologo "+ turnoEntradaDto.getOdontologoId());
+
+            }else{
+
+                //Set de Paciente  Odontologo
+                Paciente paciente = modelMapper.map(pacienteSalidaDto, Paciente.class);
+                Odontologo odontologo = modelMapper.map(odontologoSalidaDto, Odontologo.class);
+                Turno turno = new Turno(id, paciente, odontologo, turnoEntradaDto.getFechaHora());
+                Turno turnoActualizado = turnoRepository.save(turno);
+                LOGGER.info("turnoActualizado: {}", JsonPrinter.toString(turnoActualizado));
+
+                turnoSalidaDto = modelMapper.map(turnoActualizado, TurnoSalidaDto.class);
+                LOGGER.info("turnoSalidaDto: {}", JsonPrinter.toString(turnoSalidaDto));
+
+            }
+        }else{
+            LOGGER.error("No existe turno con id {}",1);
+        }
+        return turnoSalidaDto;
+    }
+
     private void configureMapping(){
         modelMapper.emptyTypeMap(TurnoEntradaDto.class, Turno.class)
                 .addMappings(mapper -> mapper.map(TurnoEntradaDto::getFechaHora, Turno::setFechaHora));
