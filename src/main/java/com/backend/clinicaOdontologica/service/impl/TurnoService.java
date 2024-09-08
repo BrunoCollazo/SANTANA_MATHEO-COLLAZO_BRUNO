@@ -7,6 +7,7 @@ import com.backend.clinicaOdontologica.dto.salida.TurnoSalidaDto;
 import com.backend.clinicaOdontologica.entity.Odontologo;
 import com.backend.clinicaOdontologica.entity.Paciente;
 import com.backend.clinicaOdontologica.entity.Turno;
+import com.backend.clinicaOdontologica.exceptions.BadRequestException;
 import com.backend.clinicaOdontologica.repository.TurnoRepository;
 import com.backend.clinicaOdontologica.service.ITurnoService;
 import com.backend.clinicaOdontologica.utils.JsonPrinter;
@@ -34,7 +35,7 @@ public class TurnoService implements ITurnoService {
     }
 
     @Override
-    public TurnoSalidaDto registrarTurno(TurnoEntradaDto turno) {
+    public TurnoSalidaDto registrarTurno(TurnoEntradaDto turno)throws BadRequestException{
         LOGGER.info("TurnoEntradaDto: {}", JsonPrinter.toString(turno));
 
         TurnoSalidaDto turnoSalidaDto = null;
@@ -45,12 +46,15 @@ public class TurnoService implements ITurnoService {
         //ACA SE CAMBIA TODO POR EL MANEJO DE EXEPCIONES
         if(pacienteSalidaDto == null && odontologoSalidaDto == null){
             LOGGER.error("No existen ni el odontologo "+ turno.getOdontologoId()+" ni el paciente " + turno.getPacienteId());
+            throw new BadRequestException("El paciente y el odontologo no se encuentran en la base de datos");
 
         }else if (pacienteSalidaDto == null){
             LOGGER.error("No existe el paciente " + turno.getPacienteId());
+            throw new BadRequestException("El paciente no se encuentran en la base de datos");
 
         }else if (odontologoSalidaDto == null){
             LOGGER.error("No existe el odontologo "+ turno.getOdontologoId());
+            throw new BadRequestException("El odontologo no se encuentran en la base de datos");
 
         }else{
 
