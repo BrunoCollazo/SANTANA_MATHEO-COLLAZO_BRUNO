@@ -2,6 +2,7 @@ package com.backend.clinicaOdontologica.service.impl;
 import com.backend.clinicaOdontologica.dto.entrada.OdontologoEntradaDto;
 import com.backend.clinicaOdontologica.dto.salida.OdontologoSalidaDto;
 import com.backend.clinicaOdontologica.entity.Odontologo;
+import com.backend.clinicaOdontologica.exceptions.ResourceNotFoundException;
 import com.backend.clinicaOdontologica.repository.OdontologoRepository;
 import com.backend.clinicaOdontologica.service.IOdontologoService;
 import com.backend.clinicaOdontologica.utils.JsonPrinter;
@@ -15,11 +16,9 @@ import java.util.List;
 @Service
 public class OdontologoService implements IOdontologoService {
 
-
     private final Logger LOGGER = LoggerFactory.getLogger(OdontologoService.class);
     private OdontologoRepository odontologoRepository;
     private final ModelMapper modelMapper;
-
 
     public OdontologoService(OdontologoRepository odontologoRepository, ModelMapper modelMapper) {
         this.odontologoRepository = odontologoRepository;
@@ -29,7 +28,6 @@ public class OdontologoService implements IOdontologoService {
 
     @Override
     public OdontologoSalidaDto registrarOdontologo(OdontologoEntradaDto odontologo) {
-
 
         Odontologo entidadOdonologo = modelMapper.map(odontologo, Odontologo.class);
 
@@ -53,7 +51,6 @@ public class OdontologoService implements IOdontologoService {
         return odontologoEncontrado;
     }
 
-
     @Override
     public List<OdontologoSalidaDto> listarOdontologos() {
         List<OdontologoSalidaDto> odontologoSalidaDtos = odontologoRepository.findAll()
@@ -65,12 +62,12 @@ public class OdontologoService implements IOdontologoService {
         return odontologoSalidaDtos;
     }
 
-    public void eliminarOdontologo(Long id) {
+    public void eliminarOdontologo(Long id) throws ResourceNotFoundException {
         if(buscarOdontologoPorId(id) != null){
             odontologoRepository.deleteById(id);
             LOGGER.warn("Se ha eliminado el odontologo con id {}", id);
         }else{
-            //excepcion a futuro not found
+            throw new ResourceNotFoundException("No existe el odontologo con id " + id);
         }
     }
 
@@ -88,7 +85,6 @@ public class OdontologoService implements IOdontologoService {
         return odontologoSalidaDto;
 
     }
-
 
     private void configureMapping(){
         modelMapper.typeMap(OdontologoEntradaDto.class, Odontologo.class);
