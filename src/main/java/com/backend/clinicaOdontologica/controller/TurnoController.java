@@ -21,14 +21,12 @@ public class TurnoController {
         this.turnoService = turnoService;
     }
 
-    //POST
     @PostMapping("/registrar")
     public ResponseEntity<TurnoSalidaDto> registrarTurno(@RequestBody @Valid TurnoEntradaDto turnoEntradaDto) throws BadRequestException {
         TurnoSalidaDto turnoSalidaDto = turnoService.registrarTurno(turnoEntradaDto);
         return new ResponseEntity<>(turnoSalidaDto, HttpStatus.CREATED);
     }
 
-    //GET
     @GetMapping("/listar")
     public ResponseEntity<List<TurnoSalidaDto>> listarTurnos(){
         return new ResponseEntity<>(turnoService.listarTurnos(), HttpStatus.OK);

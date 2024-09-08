@@ -30,13 +30,13 @@ public class OdontologoService implements IOdontologoService {
     @Override
     public OdontologoSalidaDto registrarOdontologo(OdontologoEntradaDto odontologo) {
 
-        LOGGER.info("OdontologoEntradaDto: {}", JsonPrinter.toString(odontologo));
+
         Odontologo entidadOdonologo = modelMapper.map(odontologo, Odontologo.class);
-        LOGGER.info("EntidadOdontologo: {}", JsonPrinter.toString(entidadOdonologo));
+
         Odontologo odontologoRegistrado = odontologoRepository.save(entidadOdonologo);
-        LOGGER.info("OdontologoRegistrado: {}", JsonPrinter.toString(odontologoRegistrado));
+
         OdontologoSalidaDto odontologoSalidaDto = modelMapper.map(odontologoRegistrado, OdontologoSalidaDto.class);
-        LOGGER.info("OdontologoSalidaDto: {}", JsonPrinter.toString(odontologoSalidaDto));
+
         return odontologoSalidaDto;
     }
 
@@ -75,7 +75,19 @@ public class OdontologoService implements IOdontologoService {
     }
 
     @Override
-    public OdontologoSalidaDto actualizarOdontologo(OdontologoEntradaDto odontologoEntradaDto, Long id) { return null;}
+    public OdontologoSalidaDto actualizarOdontologo(OdontologoEntradaDto odontologoEntradaDto, Long id) {
+        OdontologoSalidaDto odontologoSalidaDto = null;
+
+        if(buscarOdontologoPorId(id) != null) {
+            Odontologo entidadOdonologo = modelMapper.map(odontologoEntradaDto, Odontologo.class);
+            entidadOdonologo.setId(id);
+            Odontologo odontologoActualizado = odontologoRepository.save(entidadOdonologo);
+
+            odontologoSalidaDto = modelMapper.map(odontologoActualizado, OdontologoSalidaDto.class);
+        }
+        return odontologoSalidaDto;
+
+    }
 
 
     private void configureMapping(){
