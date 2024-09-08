@@ -31,17 +31,13 @@ public class    PacienteService implements IPacienteService {
     @Override
     public PacienteSalidaDto registrarPaciente(PacienteEntradaDto paciente) {
 
-        LOGGER.info("PacienteEntradaDto: {}", JsonPrinter.toString(paciente));
         Paciente entidadPaciente = modelMapper.map(paciente, Paciente.class);
-        LOGGER.info("EntidadPaciente: {}", JsonPrinter.toString(entidadPaciente));
         Paciente pacienteRegistrado = pacienteRepository.save(entidadPaciente);
-        LOGGER.info("PacienteRegistrado: {}", JsonPrinter.toString(pacienteRegistrado));
         PacienteSalidaDto pacienteSalidaDto = modelMapper.map(pacienteRegistrado, PacienteSalidaDto.class);
-        LOGGER.info("PacienteSalidaDto: {}", JsonPrinter.toString(pacienteSalidaDto));
         return pacienteSalidaDto;
     }
 
-    @Override//NO HAY QUE LANZAR LA EXCEPCION ACA
+    @Override
     public PacienteSalidaDto buscarPacientePorId(Long id) {
         Paciente pacienteBuscado = pacienteRepository.findById(id).orElse(null);
         LOGGER.info("PacienteBuscado: {}", JsonPrinter.toString(pacienteBuscado));
@@ -79,7 +75,16 @@ public class    PacienteService implements IPacienteService {
 
     @Override
     public PacienteSalidaDto actualizarPaciente(PacienteEntradaDto pacienteEntradaDto, Long id) {
-        return null;
+        PacienteSalidaDto buscado = buscarPacientePorId(id);
+        PacienteSalidaDto pacienteSalidaDto = null;
+        if(buscado !=null) {
+            Paciente entidadPaciente = modelMapper.map(pacienteEntradaDto, Paciente.class);
+            entidadPaciente.setId(id);
+            entidadPaciente.getDomicilio().setId(buscado.getDomicilioSalidaDto().getId());
+            Paciente pacienteActualizado = pacienteRepository.save(entidadPaciente);
+            pacienteSalidaDto = modelMapper.map(pacienteActualizado, PacienteSalidaDto.class);
+        }
+        return pacienteSalidaDto;
     }
 
 
