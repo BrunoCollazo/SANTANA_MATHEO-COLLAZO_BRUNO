@@ -45,6 +45,4 @@ public class GlobalExceptionHandler {
     }
 
 
-    //TAREA Manejar BadRequetException
-
 }

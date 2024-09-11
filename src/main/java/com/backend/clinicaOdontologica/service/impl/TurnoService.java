@@ -21,7 +21,7 @@ import java.util.List;
 @Service
 public class TurnoService implements ITurnoService {
 
-    private final Logger LOGGER = LoggerFactory.getLogger(PacienteService.class);
+    private final Logger LOGGER = LoggerFactory.getLogger(TurnoService.class);
     private final TurnoRepository turnoRepository;
     private final PacienteService pacienteService;
     private final OdontologoService odontologoService;
@@ -40,31 +40,28 @@ public class TurnoService implements ITurnoService {
         LOGGER.info("TurnoEntradaDto: {}", JsonPrinter.toString(turno));
 
         TurnoSalidaDto turnoSalidaDto = null;
-        //Busca que existan los id proporcioado por el constructor de TurnoEntradaDto
+
         PacienteSalidaDto pacienteSalidaDto = pacienteService.buscarPacientePorId(turno.getPacienteId());
         OdontologoSalidaDto odontologoSalidaDto = odontologoService.buscarOdontologoPorId(turno.getOdontologoId());
 
-        //ACA SE CAMBIA TODO POR EL MANEJO DE EXEPCIONES
         if(pacienteSalidaDto == null && odontologoSalidaDto == null){
-            LOGGER.error("No existen ni el odontologo "+ turno.getOdontologoId()+" ni el paciente " + turno.getPacienteId());
+            LOGGER.error("No existen ni el odontologo {} ni el paciente {}", turno.getOdontologoId(), turno.getPacienteId());
             throw new BadRequestException("El paciente y el odontologo no se encuentran en la base de datos");
 
         }else if (pacienteSalidaDto == null){
-            LOGGER.error("No existe el paciente " + turno.getPacienteId());
+            LOGGER.error("No existe el paciente {}", turno.getPacienteId());
             throw new BadRequestException("El paciente no se encuentran en la base de datos");
 
         }else if (odontologoSalidaDto == null){
-            LOGGER.error("No existe el odontologo "+ turno.getOdontologoId());
+            LOGGER.error("No existe el odontologo {}", turno.getOdontologoId());
             throw new BadRequestException("El odontologo no se encuentran en la base de datos");
 
         }else{
 
-            LOGGER.info("TurnoEntradaDto: {}", JsonPrinter.toString(turno));
             Turno entidadTurno = modelMapper.map(turno, Turno.class);
 
             LOGGER.info("EntidadTurno: {}", JsonPrinter.toString(entidadTurno));
 
-            //Set de Paciente  Odontologo
             Paciente paciente = modelMapper.map(pacienteSalidaDto, Paciente.class);
             Odontologo odontologo = modelMapper.map(odontologoSalidaDto, Odontologo.class);
             entidadTurno.setPaciente(paciente);
@@ -93,27 +90,32 @@ public class TurnoService implements ITurnoService {
 
     @Override
     public TurnoSalidaDto buscarTurnoPorId(Long id) {
+        LOGGER.info("Buscar turno con id = {}", id);
         Turno turno = turnoRepository.findById(id).orElse(null);
         TurnoSalidaDto turnoSalidaDto = null;
         if (turno != null){
             turnoSalidaDto = modelMapper.map(turno, TurnoSalidaDto.class);
         }
+        LOGGER.info("Turno: {}", JsonPrinter.toString(turnoSalidaDto));
         return turnoSalidaDto;
     }
 
     @Override
     public void eliminarTurno(Long id) throws ResourceNotFoundException {
+        LOGGER.info("Eliminar turno con id = {}", id);
         if(buscarTurnoPorId(id) != null){
-            //llamada a la capa repositorio para eliminar
             turnoRepository.deleteById(id);
             LOGGER.warn("Se ha eliminado el turno con id {}", id);
         } else {
+            LOGGER.error("No existe el turno con id = {}", id);
             throw new ResourceNotFoundException("No existe el turno con id " + id);
         }
     }
 
     @Override
-    public TurnoSalidaDto actualizarTurno(TurnoEntradaDto turnoEntradaDto, Long id) {
+    public TurnoSalidaDto actualizarTurno(TurnoEntradaDto turnoEntradaDto, Long id) throws ResourceNotFoundException, BadRequestException{
+        LOGGER.info("Actualizar turno con id = {}", id);
+
         TurnoSalidaDto turnoSalidaDto = null;
         if(buscarTurnoPorId(id) != null){
 
@@ -121,17 +123,16 @@ public class TurnoService implements ITurnoService {
             OdontologoSalidaDto odontologoSalidaDto = odontologoService.buscarOdontologoPorId(turnoEntradaDto.getOdontologoId());
 
             if(pacienteSalidaDto == null && odontologoSalidaDto == null){
-                LOGGER.error("No existen ni el odontologo "+ turnoEntradaDto.getOdontologoId()+" ni el paciente " + turnoEntradaDto.getPacienteId());
-
+                LOGGER.error("No existen ni el odontologo {} ni el paciente {}", turnoEntradaDto.getOdontologoId(), turnoEntradaDto.getPacienteId());
+                throw new BadRequestException("El paciente y el odontologo no se encuentran en la base de datos");
             }else if (pacienteSalidaDto == null){
-                LOGGER.error("No existe el paciente " + turnoEntradaDto.getPacienteId());
-
+                LOGGER.error("No existe el paciente {}", turnoEntradaDto.getPacienteId());
+                throw new BadRequestException("El paciente no se encuentran en la base de datos");
             }else if (odontologoSalidaDto == null){
-                LOGGER.error("No existe el odontologo "+ turnoEntradaDto.getOdontologoId());
-
+                LOGGER.error("No existe el odontologo {}", turnoEntradaDto.getOdontologoId());
+                throw new BadRequestException("El odontologo no se encuentran en la base de datos");
             }else{
 
-                //Set de Paciente  Odontologo
                 Paciente paciente = modelMapper.map(pacienteSalidaDto, Paciente.class);
                 Odontologo odontologo = modelMapper.map(odontologoSalidaDto, Odontologo.class);
                 Turno turno = new Turno(id, paciente, odontologo, turnoEntradaDto.getFechaHora());
@@ -139,12 +140,15 @@ public class TurnoService implements ITurnoService {
                 LOGGER.info("turnoActualizado: {}", JsonPrinter.toString(turnoActualizado));
 
                 turnoSalidaDto = modelMapper.map(turnoActualizado, TurnoSalidaDto.class);
-                LOGGER.info("turnoSalidaDto: {}", JsonPrinter.toString(turnoSalidaDto));
 
             }
         }else{
-            LOGGER.error("No existe turno con id {}",1);
+            LOGGER.error("No existe turno con id {}",id);
+            throw new ResourceNotFoundException("No existe el turno con id " + id);
         }
+
+        LOGGER.info("turnoSalidaDto: {}", JsonPrinter.toString(turnoSalidaDto));
+
         return turnoSalidaDto;
     }
 
