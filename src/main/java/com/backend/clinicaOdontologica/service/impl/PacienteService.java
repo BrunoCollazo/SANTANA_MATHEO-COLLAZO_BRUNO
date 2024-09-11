@@ -73,15 +73,19 @@ public class    PacienteService implements IPacienteService {
     }
 
     @Override
-    public PacienteSalidaDto actualizarPaciente(PacienteEntradaDto pacienteEntradaDto, Long id) {
-        PacienteSalidaDto buscado = buscarPacientePorId(id);
+    public PacienteSalidaDto actualizarPaciente(PacienteEntradaDto pacienteEntradaDto, Long id) throws ResourceNotFoundException {
         PacienteSalidaDto pacienteSalidaDto = null;
-        if(buscado !=null) {
+
+        if(buscarPacientePorId(id) !=null) {
             Paciente entidadPaciente = modelMapper.map(pacienteEntradaDto, Paciente.class);
             entidadPaciente.setId(id);
-            entidadPaciente.getDomicilio().setId(buscado.getDomicilioSalidaDto().getId());
+            entidadPaciente.getDomicilio().setId(buscarPacientePorId(id).getDomicilioSalidaDto().getId());
             Paciente pacienteActualizado = pacienteRepository.save(entidadPaciente);
+
             pacienteSalidaDto = modelMapper.map(pacienteActualizado, PacienteSalidaDto.class);
+        }else{
+            LOGGER.error("No existe paciente con id {}",id);
+            throw new ResourceNotFoundException("No existe el paciente con id " + id);
         }
         return pacienteSalidaDto;
     }
