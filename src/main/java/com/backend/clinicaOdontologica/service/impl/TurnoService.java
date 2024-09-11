@@ -157,7 +157,7 @@ public class TurnoService implements ITurnoService {
                 .addMappings(mapper -> mapper.map(TurnoEntradaDto::getFechaHora, Turno::setFechaHora));
 
         modelMapper.typeMap(Turno.class, TurnoSalidaDto.class)
-                .addMappings(mapper -> mapper.map(Turno::getPaciente, TurnoSalidaDto::setPacienteSalidaDto))
+                .addMappings(mapper -> mapper.map(Turno::getPaciente, TurnoSalidaDto::setTurnoPacienteSalidaDto))
                 .addMappings(mapper -> mapper.map(Turno::getOdontologo, TurnoSalidaDto::setOdontologoSalidaDto));
 
         modelMapper.typeMap(OdontologoSalidaDto.class, Odontologo.class);
