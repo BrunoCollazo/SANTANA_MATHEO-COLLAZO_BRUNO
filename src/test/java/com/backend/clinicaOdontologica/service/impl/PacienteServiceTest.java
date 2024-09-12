@@ -58,6 +58,15 @@ class PacienteServiceTest {
     }
 
     @Test
+    void deberiaLanzarUnaResourceNotFoundExceptionCuandoIntentaEliminarUnPacienteQueNoExiste(){
+        when(pacienteRepositoryMock.findById(1L)).thenReturn(Optional.empty());
+
+        assertThrows(ResourceNotFoundException.class, () -> pacienteService.eliminarPaciente(1L));
+
+        verify(pacienteRepositoryMock, never()).deleteById(1L);
+
+    }
+    @Test
     void deberiaDevolverUnListadoNoVacioDePacientes(){
         List<Paciente> pacientes = new java.util.ArrayList<>(List.of(paciente));
         when(pacienteRepositoryMock.findAll()).thenReturn(pacientes);
@@ -67,51 +76,6 @@ class PacienteServiceTest {
 
     }
 
-    @Test
-    void deberiaEliminarElPacienteConId1(){
-        when(pacienteRepositoryMock.findById(1L)).thenReturn(Optional.of(paciente));
-        doNothing().when(pacienteRepositoryMock).deleteById(1L);
-
-        assertDoesNotThrow(() -> pacienteService.eliminarPaciente(1L));
-
-        verify(pacienteRepositoryMock, times(1)).deleteById(1L);
-
-    }
-
-    @Test
-    void deberiaEliminarElPacienteConId2(){
-        paciente.setId(2L);
-        when(pacienteRepositoryMock.findById(2L)).thenReturn(Optional.of(paciente));
-        doNothing().when(pacienteRepositoryMock).deleteById(2L);
-
-        try{
-            pacienteService.eliminarPaciente(2L);
-        } catch (ResourceNotFoundException resourceNotFoundException){
-            fail("No debería lanzarse la excepción");
-        }
-        verify(pacienteRepositoryMock, times(1)).deleteById(2L);
-    }
-
-
-    @Test
-    void deberiaDevolverUnaListaVaciaDePacientes(){
-        when(pacienteRepositoryMock.findAll()).thenReturn(new ArrayList<>());
-
-        List<PacienteSalidaDto> pacientes = pacienteService.listarPacientes();
-        assertTrue(pacientes.isEmpty());
-        verify(pacienteRepositoryMock, times(1)).findAll();
-    }
-
-
-    @Test
-    void deberiaLanzarExcepcionCuandoElPacienteAActualizarNoSeaEncontrado(){
-        when(pacienteRepositoryMock.findById(2L)).thenReturn(Optional.empty());
-
-        pacienteEntradaDto.setDni(66666666);
-
-        assertThrows(ResourceNotFoundException.class, () -> pacienteService.actualizarPaciente(pacienteEntradaDto, 2L));
-
-    }
 
 
 

@@ -59,13 +59,13 @@ public class TurnoServiceTest {
     }
 
     @Test
-    void deberiaRegistrarTurno() throws BadRequestException {
+    void deberiaRegistrarTurnoYDevolverUnTurnoSalidaDtoConSuId() throws BadRequestException {
         when(pacienteServiceMock.buscarPacientePorId(1L)).thenReturn(pacienteSalidaDto);
         when(odontologoServiceMock.buscarOdontologoPorId(1L)).thenReturn(odontologoSalidaDto);
         when(turnoRepositoryMock.save(any(Turno.class))).thenReturn(turno);
 
         TurnoSalidaDto turnoSalidaDto = turnoService.registrarTurno(turnoEntradaDto);
-
+        assertNotNull(turnoSalidaDto.getId());
         assertNotNull(turnoSalidaDto);
         verify(turnoRepositoryMock, times(1)).save(any(Turno.class));
     }
@@ -73,9 +73,11 @@ public class TurnoServiceTest {
     @Test
     void deberiaLanzarBadRequestExceptionSiDatosInvalidos() {
         when(pacienteServiceMock.buscarPacientePorId(1L)).thenReturn(null);
+        when(odontologoServiceMock.buscarOdontologoPorId(1L)).thenReturn(null);
+
         BadRequestException exception = assertThrows(BadRequestException.class, () -> turnoService.registrarTurno(turnoEntradaDto));
         assertEquals("El paciente y el odontologo no se encuentran en la base de datos", exception.getMessage());
-        verify(turnoRepositoryMock, times(0)).save(any(Turno.class));
+        verify(turnoRepositoryMock, never()).save(any(Turno.class));
     }
     @Test
 
@@ -85,7 +87,7 @@ public class TurnoServiceTest {
         TurnoSalidaDto turnoSalidaDto = turnoService.buscarTurnoPorId(1L);
 
         assertNotNull(turnoSalidaDto);
-        verify(turnoRepositoryMock, times(1)).findById(1L);
+        assertEquals(1L, turnoSalidaDto.getId());
     }
 
     @Test
