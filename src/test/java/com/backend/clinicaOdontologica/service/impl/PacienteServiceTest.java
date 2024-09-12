@@ -27,11 +27,6 @@ import static org.mockito.Mockito.times;
 @TestPropertySource(locations = "classpath:application-test.properties")
 class PacienteServiceTest {
 
-    //@Mock
-    //private PacienteRepository pacienteRepository;
-    //@InjectMocks
-    //private PacienteService pacienteService;
-
     private final PacienteRepository pacienteRepositoryMock = mock(PacienteRepository.class);
     private final ModelMapper modelMapper = new ModelMapper();
 

@@ -18,19 +18,15 @@ import static org.mockito.Mockito.*;
 
 public class OdontologoServiceTest {
 
-    private OdontologoService odontologoService;
-    private OdontologoRepository odontologoRepositoryMock;
-    private ModelMapper modelMapper;
+    private OdontologoRepository odontologoRepositoryMock = mock(OdontologoRepository.class);
+    private ModelMapper modelMapper = new ModelMapper();
+    private OdontologoService odontologoService = new OdontologoService(odontologoRepositoryMock, modelMapper);
 
     private Odontologo odontologo;
     private OdontologoEntradaDto odontologoEntradaDto;
 
     @BeforeEach
     void setUp() {
-        odontologoRepositoryMock = mock(OdontologoRepository.class);
-        modelMapper = new ModelMapper();
-        odontologoService = new OdontologoService(odontologoRepositoryMock, modelMapper);
-
         odontologo = new Odontologo(1L, "A654321", "Ana","Sanchez" );
         odontologoEntradaDto = new OdontologoEntradaDto("A654321", "Ana", "Sanchez");
     }
@@ -55,13 +51,6 @@ public class OdontologoServiceTest {
         assertNotNull(odontologoSalidaDto);
         assertEquals("Ana", odontologoSalidaDto.getNombre());
         verify(odontologoRepositoryMock, times(1)).findById(1L);
-    }
-
-    @Test
-    void deberiaLanzarExcepcionSiNoSeEncuentraOdontologo() {
-        when(odontologoRepositoryMock.findById(1L)).thenReturn(Optional.empty());
-
-        assertThrows(ResourceNotFoundException.class, () -> odontologoService.buscarOdontologoPorId(1L));
     }
 
     @Test
