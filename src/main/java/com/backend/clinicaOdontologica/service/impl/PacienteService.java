@@ -30,22 +30,24 @@ public class    PacienteService implements IPacienteService {
     @Override
     public PacienteSalidaDto registrarPaciente(PacienteEntradaDto paciente) {
 
+        LOGGER.info("PacienteEntradaDto {}", JsonPrinter.toString(paciente));
         Paciente entidadPaciente = modelMapper.map(paciente, Paciente.class);
         Paciente pacienteRegistrado = pacienteRepository.save(entidadPaciente);
         PacienteSalidaDto pacienteSalidaDto = modelMapper.map(pacienteRegistrado, PacienteSalidaDto.class);
+        LOGGER.info("pacienteSalidaDto {}", JsonPrinter.toString(pacienteSalidaDto));
         return pacienteSalidaDto;
     }
 
     @Override
     public PacienteSalidaDto buscarPacientePorId(Long id) {
+        LOGGER.info("Pacientelogo a buscar: {}", id);
         Paciente pacienteBuscado = pacienteRepository.findById(id).orElse(null);
         LOGGER.info("PacienteBuscado: {}", JsonPrinter.toString(pacienteBuscado));
         PacienteSalidaDto pacienteEncontrado = null;
                 if(pacienteBuscado != null){
                     pacienteEncontrado = modelMapper.map(pacienteBuscado, PacienteSalidaDto.class);
-                    LOGGER.info("PacienteEncontrado: {}", JsonPrinter.toString(pacienteEncontrado));
-                }else LOGGER.error("No se ha encontrado el paciente con id {}", id);
-
+                }
+        LOGGER.info("PacienteEncontrado: {}", JsonPrinter.toString(pacienteEncontrado));
         return pacienteEncontrado;
     }
 
@@ -62,10 +64,12 @@ public class    PacienteService implements IPacienteService {
 
 
     public void eliminarPaciente(Long id) throws ResourceNotFoundException {
+        LOGGER.info("Paciente id a eliminar {}", id);
         if(buscarPacientePorId(id) != null){
             pacienteRepository.deleteById(id);
             LOGGER.warn("Se ha eliminado el paciente con id {}", id);
         } else {
+            LOGGER.error("No existe el paciente con id = {}", id);
             throw new ResourceNotFoundException("No existe el paciente con id " + id);
         }
 
@@ -73,6 +77,7 @@ public class    PacienteService implements IPacienteService {
 
     @Override
     public PacienteSalidaDto actualizarPaciente(PacienteEntradaDto pacienteEntradaDto, Long id) throws ResourceNotFoundException {
+        LOGGER.info("Paciente recibido {} {}", id, JsonPrinter.toString(pacienteEntradaDto));
         PacienteSalidaDto pacienteSalidaDto = null;
 
         if(buscarPacientePorId(id) !=null) {
