@@ -59,7 +59,7 @@ public class TurnoServiceTest {
     }
 
     @Test
-    void deberiaRegistrarTurnoYDevolverUnTurnoSalidaDtoConSuId() throws BadRequestException {
+    void deberiaRegistrarTurno_YDevolverUnTurnoSalidaDtoConSuId() throws BadRequestException {
         when(pacienteServiceMock.buscarPacientePorId(1L)).thenReturn(pacienteSalidaDto);
         when(odontologoServiceMock.buscarOdontologoPorId(1L)).thenReturn(odontologoSalidaDto);
         when(turnoRepositoryMock.save(any(Turno.class))).thenReturn(turno);
@@ -71,7 +71,7 @@ public class TurnoServiceTest {
     }
 
     @Test
-    void deberiaLanzarBadRequestExceptionSiDatosInvalidos() {
+    void deberiaLanzarBadRequestException_SiNoExistenNiElOdontologoNiElPaciente() {
         when(pacienteServiceMock.buscarPacientePorId(1L)).thenReturn(null);
         when(odontologoServiceMock.buscarOdontologoPorId(1L)).thenReturn(null);
 
@@ -81,7 +81,7 @@ public class TurnoServiceTest {
     }
     @Test
 
-    void deberiaBuscarTurnoPorId() {
+    void deberiaBuscarTurnoPorId_YDevolverUnDTOConElMismoId() {
         when(turnoRepositoryMock.findById(1L)).thenReturn(Optional.of(turno));
 
         TurnoSalidaDto turnoSalidaDto = turnoService.buscarTurnoPorId(1L);
@@ -91,7 +91,7 @@ public class TurnoServiceTest {
     }
 
     @Test
-    void deberiaEliminarTurno() {
+    void deberiaEliminarTurnoQueExistaSinTirarExcepciones() {
         when(turnoRepositoryMock.findById(1L)).thenReturn(Optional.of(turno));
         doNothing().when(turnoRepositoryMock).deleteById(1L);
 

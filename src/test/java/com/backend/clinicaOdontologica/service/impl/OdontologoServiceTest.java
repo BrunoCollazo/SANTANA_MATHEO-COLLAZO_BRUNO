@@ -32,7 +32,7 @@ public class OdontologoServiceTest {
     }
 
     @Test
-    void deberiaRegistrarOdontologo() {
+    void deberiaRegistrarOdontologoLLamadoAna_yDevolverUnaDTOSalidaConId() {
         when(odontologoRepositoryMock.save(any(Odontologo.class))).thenReturn(odontologo);
 
         OdontologoSalidaDto odontologoSalidaDto = odontologoService.registrarOdontologo(odontologoEntradaDto);
@@ -43,7 +43,7 @@ public class OdontologoServiceTest {
     }
 
     @Test
-    void deberiaBuscarOdontologoPorId() {
+    void deberiaBuscarOdontologoPorId_yDelverUnDTOSalidaConElMismoId() {
         when(odontologoRepositoryMock.findById(1L)).thenReturn(Optional.of(odontologo));
 
         OdontologoSalidaDto odontologoSalidaDto = odontologoService.buscarOdontologoPorId(1L);
@@ -54,7 +54,7 @@ public class OdontologoServiceTest {
     }
 
     @Test
-    void deberiaEliminarOdontologo() {
+    void deberiaEliminarOdontologoQueExistaSinTirarExcepciones() {
         when(odontologoRepositoryMock.findById(1L)).thenReturn(Optional.of(odontologo));
         doNothing().when(odontologoRepositoryMock).deleteById(1L);
 

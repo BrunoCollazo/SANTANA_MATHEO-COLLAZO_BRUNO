@@ -39,21 +39,21 @@ class PacienteServiceTest {
     static void setUp(){
 
         // Inicializa el objeto común antes de cada prueba
-        paciente = new Paciente(1L, "Juan", "Perez", 123456, LocalDate.of(2024, 6, 22),
+        paciente = new Paciente(1L, "Pedro", "Perez", 123456, LocalDate.of(2024, 6, 22),
                 new Domicilio(1L, "Calle", 123, "Localidad", "Provincia"));
 
         pacienteEntradaDto = new PacienteEntradaDto("Juan", "Perez", 123456, LocalDate.of(2024, 6, 22), new DomicilioEntradaDto("Calle", 123, "Localidad", "Provincia"));
     }
 
     @Test
-    void deberiaMandarAlRepositorioUnPacienteDeNombreJuan_yRetornarUnSalidaDtoConSuId(){
+    void deberiaMandarAlRepositorioUnPacienteDeNombrePedro_yRetornarUnSalidaDtoConSuId(){
         when(pacienteRepositoryMock.save(any(Paciente.class))).thenReturn(paciente);
 
         PacienteSalidaDto pacienteSalidaDto = pacienteService.registrarPaciente(pacienteEntradaDto);
 
         assertNotNull(pacienteSalidaDto);
         assertNotNull(pacienteSalidaDto.getId());
-        assertEquals("Juan", pacienteSalidaDto.getNombre());
+        assertEquals("Pedro", pacienteSalidaDto.getNombre());
         verify(pacienteRepositoryMock, times(1)).save(any(Paciente.class));
     }
 
