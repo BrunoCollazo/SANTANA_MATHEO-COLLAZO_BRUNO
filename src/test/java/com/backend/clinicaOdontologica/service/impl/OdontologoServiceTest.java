@@ -61,4 +61,11 @@ public class OdontologoServiceTest {
         assertDoesNotThrow(() -> odontologoService.eliminarOdontologo(1L));
         verify(odontologoRepositoryMock, times(1)).deleteById(1L);
     }
+
+    @Test
+    void deberiaLanzarResourceNotFound_AlIntentarEliminarUnOdontologoQueNoExiste(){
+        when(odontologoRepositoryMock.findById(1L)).thenReturn(Optional.empty());
+        assertThrows(ResourceNotFoundException.class, () -> odontologoService.eliminarOdontologo(1L));
+        verify(odontologoRepositoryMock, times(0)).deleteById(1L);
+    }
 }
